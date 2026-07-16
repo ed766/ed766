@@ -1,32 +1,30 @@
 # SoC Design Verification Portfolio
 
-I build report-backed RTL and verification projects with SystemVerilog, UVM,
-Verilator, C/C++/SystemC reference models, assertions, formal checks, Python
-automation, and open-source implementation tools. The three projects below are
-deliberately separated by verification scope: firmware-driven subsystem
-integration, cache microarchitecture/RAS, and reusable interconnect VIP.
+I build report-backed RTL and verification projects with SystemVerilog, UVM, Verilator, C/C++/SystemC reference models, assertions, formal checks, Python automation, and open-source implementation tools. The portfolio is deliberately separated by verification scope rather than repeating the same claims across projects.
 
-| Project | Engineering focus | Measured evidence | Five-minute reviewer path |
+<!-- BEGIN GENERATED PORTFOLIO -->
+| Project | Primary specialty | Selected measured evidence | Review |
 | --- | --- | --- | --- |
-| [RISC-V Chiplet SoC](https://github.com/ed766/ucie_chiplet_soc) | RV32/APB firmware control, queued DMA, parity-protected memory, behavioral UCIe-style transport, UPF 4.0, retention/isolation, async CDC, and LibreLane | `70/70` stable runs, `60/60` functional bins, `26/26` low-power targets, `12/12` firmware scenarios, `7/7` solver proofs | `make -C chiplet_extension project-check` and [project metrics](https://github.com/ed766/ucie_chiplet_soc/blob/main/docs/project_metrics.md) |
-| [AXI4 L1 Cache DV](https://github.com/ed766/AXI4-L1-Cache-DV) | Blocking write-back cache, independent C++ trace replay, replacement/maintenance/error matrices, direct-mapped vs 2-way tradeoffs, and optional SECDED RAS | `22/22` directed tests, `100/100` stress rows, `55/55` interaction bins, `4/4` mutations, `7/7` SECDED RAS points | `make release-check` and [verification traceability](https://github.com/ed766/AXI4-L1-Cache-DV/blob/main/docs/traceability.md) |
-| [AXI4 QoS Fabric DV](https://github.com/ed766/AXI4-QoS-Fabric-DV) | Four-master/four-target AXI4 subset, multiple outstanding IDs, legal out-of-order responses, QoS/aging fairness, real UVM, reusable AXI agent collateral, SystemC replay, and integrated CDC | `30/30` named tests, `100/100` random runs, `8/8` UVM tests, `56/56` bins, `24/24` advanced crosses, `6/6` mutations | `make project-check` and [reviewer guide](https://github.com/ed766/AXI4-QoS-Fabric-DV/blob/main/docs/reviewer_guide.md) |
+| [RISC-V Chiplet SoC](https://github.com/ed766/ucie_chiplet_soc) | Firmware-driven subsystem integration, DMA, UPF, low power, CDC | `70 / 70` stable; `12 / 12` firmware; `26 / 26` power; `4 / 4` CDC | [Metrics](https://github.com/ed766/ucie_chiplet_soc/blob/main/docs/project_metrics.md) · [CI](https://github.com/ed766/ucie_chiplet_soc/actions) · [v1.1.1](https://github.com/ed766/ucie_chiplet_soc/releases/tag/v1.1.1) |
+| [AXI4 L1 Cache DV](https://github.com/ed766/AXI4-L1-Cache-DV) | Cache microarchitecture, C++ replay, replacement/error checking, SECDED RAS | `22 / 22` directed; `127 / 127` replay; `55 / 55` crosses; `7 / 7` RAS | [Metrics](https://github.com/ed766/AXI4-L1-Cache-DV/blob/main/docs/project_metrics.md) · [CI](https://github.com/ed766/AXI4-L1-Cache-DV/actions) · [v0.3.2](https://github.com/ed766/AXI4-L1-Cache-DV/releases/tag/v0.3.2) |
+| [AXI4 QoS Fabric DV](https://github.com/ed766/AXI4-QoS-Fabric-DV) | Reusable UVM/VIP, AXI concurrency, SystemC replay, QoS/fairness | `8 / 8` UVM; `130 / 130` replay; `24 / 24` advanced crosses; `72 / 72` QoS points | [Metrics](https://github.com/ed766/AXI4-QoS-Fabric-DV/blob/main/docs/project_metrics.md) · [CI](https://github.com/ed766/AXI4-QoS-Fabric-DV/actions) · [v0.3.1](https://github.com/ed766/AXI4-QoS-Fabric-DV/releases/tag/v0.3.1) |
+<!-- END GENERATED PORTFOLIO -->
 
-## Portfolio Coverage
+## Skills Matrix
+
+| Area | Chiplet SoC | L1 cache | QoS fabric |
+| --- | --- | --- | --- |
+| System integration | RV32 firmware, APB MMIO, DMA, AES service | CPU/cache/AXI memory path | Four-initiator/four-target shared fabric |
+| Verification methodology | Procedural closure plus supporting UVM/RAL | C++ trace replay and mutation-driven debug | Principal real-UVM lane and reusable AXI agents |
+| Architecture depth | UPF, retention/isolation, async CDC | Replacement, maintenance, associativity, SECDED | IDs, out-of-order responses, QoS, aging, fairness |
+| Independent models | Python/C transaction and CRC models | Cycle-independent C++ cache model | SystemC/TLM arbitration and routing model |
+| Evidence | Firmware, power, formal, CDC, coverage | Stress, crosses, RAS, performance, synthesis proxy | UVM, VIP self-test, QoS dashboard, CDC, formal |
 
 ```mermaid
 flowchart LR
-  FW["Firmware / MMIO"] --> SOC["RISC-V Chiplet SoC"]
-  PWR["UPF / CDC / low power"] --> SOC
-  CACHE["Cache policy / RAS"] --> L1["AXI4 L1 Cache"]
-  CPP["Independent C++ replay"] --> L1
-  UVM["Reusable UVM agents"] --> FAB["AXI4 QoS Fabric"]
-  QOS["IDs / QoS / fairness"] --> FAB
-  SOC --> PORT["Subsystem DV"]
-  L1 --> PORT
-  FAB --> PORT
+  SOC["RISC-V chiplet\nfirmware + low power"] --> PORT["Subsystem DV portfolio"]
+  L1["AXI4 L1 cache\nmicroarchitecture + RAS"] --> PORT
+  FAB["AXI4 QoS fabric\nUVM/VIP + concurrency"] --> PORT
 ```
 
-All published metrics are generated from checked-in CSV/Markdown reports.
-These projects demonstrate open-source verification evidence, not UCIe/AXI
-certification or commercial UPF, CDC, timing, and formal signoff.
+All headline metrics are generated from checked-in canonical reports. These projects demonstrate open-source engineering evidence, not UCIe/AXI certification or commercial UPF, CDC, timing, and formal signoff.

@@ -1,0 +1,45 @@
+name: portfolio-consistency
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  metrics-and-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: profile
+      - uses: actions/checkout@v4
+        with:
+          repository: ed766/ucie_chiplet_soc
+          path: chiplet
+      - uses: actions/checkout@v4
+        with:
+          repository: ed766/AXI4-L1-Cache-DV
+          path: cache
+      - uses: actions/checkout@v4
+        with:
+          repository: ed766/AXI4-QoS-Fabric-DV
+          path: fabric
+      - name: Regenerate portfolio metrics
+        run: |
+          python3 profile/scripts/update_portfolio.py \
+            --chiplet chiplet --cache cache --fabric fabric
+          git -C profile diff --exit-code
+      - name: Validate public links
+        run: |
+          python3 - <<'PY'
+          import re, urllib.request
+          from pathlib import Path
+          text = Path('profile/README.md').read_text()
+          urls = sorted(set(re.findall(r'https://github\.com/[^)]+', text)))
+          for url in urls:
+              request = urllib.request.Request(url, method='HEAD', headers={'User-Agent':'portfolio-link-check'})
+              with urllib.request.urlopen(request, timeout=20) as response:
+                  if response.status >= 400:
+                      raise SystemExit(f'bad link: {url} ({response.status})')
+          print(f'validated {len(urls)} links')
+          PY
