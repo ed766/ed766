@@ -9,21 +9,27 @@ jobs:
   metrics-and-links:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           path: profile
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: ed766/ucie_chiplet_soc
           path: chiplet
-      - uses: actions/checkout@v4
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/checkout@v7
         with:
           repository: ed766/AXI4-L1-Cache-DV
           path: cache
-      - uses: actions/checkout@v4
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/checkout@v7
         with:
           repository: ed766/AXI4-QoS-Fabric-DV
           path: fabric
+          fetch-depth: 0
+          fetch-tags: true
       - name: Regenerate portfolio metrics
         run: |
           python3 profile/scripts/update_portfolio.py \

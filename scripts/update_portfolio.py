@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,6 +24,19 @@ def need(values: dict[str, str], *keys: str) -> None:
         raise SystemExit(f"Missing canonical metrics: {', '.join(missing)}")
 
 
+def latest_release(repo: Path) -> str:
+    result = subprocess.run(
+        ["git", "-C", str(repo), "tag", "--list", "v*", "--sort=-version:refname"],
+        check=True,
+        text=True,
+        capture_output=True,
+    )
+    tags = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+    if not tags:
+        raise SystemExit(f"No versioned release tag found in {repo}")
+    return tags[0]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--chiplet", type=Path, default=ROOT.parent / "ucie_chiplet_soc")
@@ -32,31 +46,34 @@ def main() -> int:
     chiplet = metrics(args.chiplet / "chiplet_extension" / "reports" / "project_metrics.csv")
     cache = metrics(args.cache / "reports" / "project_metrics.csv")
     fabric = metrics(args.fabric / "reports" / "project_metrics.csv")
-    need(chiplet, "stable_runs", "firmware_soc_scenarios", "low_power_proxy_targets", "integrated_async_cdc")
+    need(chiplet, "stable_runs", "compiled_firmware_scenarios", "low_power_proxy_targets", "integrated_async_cdc")
     need(cache, "directed_regression", "trace_replay", "interaction_coverage", "secded_ras_coverage")
     need(fabric, "uvm_runtime", "full_model_replay", "advanced_interaction_coverage", "sustained_qos_points")
+    chiplet_release = latest_release(args.chiplet)
+    cache_release = latest_release(args.cache)
+    fabric_release = latest_release(args.fabric)
     rows = [
         ("[RISC-V Chiplet SoC](https://github.com/ed766/ucie_chiplet_soc)",
          "Firmware-driven subsystem integration, DMA, UPF, low power, CDC",
-         f"`{chiplet['stable_runs']}` stable; `{chiplet['firmware_soc_scenarios']}` firmware; "
+         f"`{chiplet['stable_runs']}` stable; `{chiplet['compiled_firmware_scenarios']}` GCC/ISS; "
          f"`{chiplet['low_power_proxy_targets']}` power; `{chiplet['integrated_async_cdc']}` CDC",
          "[Metrics](https://github.com/ed766/ucie_chiplet_soc/blob/main/docs/project_metrics.md) · "
          "[CI](https://github.com/ed766/ucie_chiplet_soc/actions) · "
-         "[v1.1.1](https://github.com/ed766/ucie_chiplet_soc/releases/tag/v1.1.1)"),
+         f"[{chiplet_release}](https://github.com/ed766/ucie_chiplet_soc/releases/tag/{chiplet_release})"),
         ("[AXI4 L1 Cache DV](https://github.com/ed766/AXI4-L1-Cache-DV)",
          "Cache microarchitecture, C++ replay, replacement/error checking, SECDED RAS",
          f"`{cache['directed_regression']}` directed; `{cache['trace_replay']}` replay; "
          f"`{cache['interaction_coverage']}` crosses; `{cache['secded_ras_coverage']}` RAS",
          "[Metrics](https://github.com/ed766/AXI4-L1-Cache-DV/blob/main/docs/project_metrics.md) · "
          "[CI](https://github.com/ed766/AXI4-L1-Cache-DV/actions) · "
-         "[v0.3.2](https://github.com/ed766/AXI4-L1-Cache-DV/releases/tag/v0.3.2)"),
+         f"[{cache_release}](https://github.com/ed766/AXI4-L1-Cache-DV/releases/tag/{cache_release})"),
         ("[AXI4 QoS Fabric DV](https://github.com/ed766/AXI4-QoS-Fabric-DV)",
          "Reusable UVM/VIP, AXI concurrency, SystemC replay, QoS/fairness",
          f"`{fabric['uvm_runtime']}` UVM; `{fabric['full_model_replay']}` replay; "
          f"`{fabric['advanced_interaction_coverage']}` advanced crosses; `{fabric['sustained_qos_points']}` QoS points",
          "[Metrics](https://github.com/ed766/AXI4-QoS-Fabric-DV/blob/main/docs/project_metrics.md) · "
          "[CI](https://github.com/ed766/AXI4-QoS-Fabric-DV/actions) · "
-         "[v0.3.1](https://github.com/ed766/AXI4-QoS-Fabric-DV/releases/tag/v0.3.1)"),
+         f"[{fabric_release}](https://github.com/ed766/AXI4-QoS-Fabric-DV/releases/tag/{fabric_release})"),
     ]
     block = [START,
              "| Project | Primary specialty | Selected measured evidence | Review |",
