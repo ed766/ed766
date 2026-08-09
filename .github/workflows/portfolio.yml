@@ -30,10 +30,16 @@ jobs:
           path: fabric
           fetch-depth: 0
           fetch-tags: true
+      - uses: actions/checkout@v7
+        with:
+          repository: ed766/INT8-Tensor-Accelerator-DV
+          path: accelerator
+          fetch-depth: 0
+          fetch-tags: true
       - name: Regenerate portfolio metrics
         run: |
           python3 profile/scripts/update_portfolio.py \
-            --chiplet chiplet --cache cache --fabric fabric
+            --chiplet chiplet --cache cache --fabric fabric --accelerator accelerator
           git -C profile diff --exit-code
       - name: Validate public links
         run: |
