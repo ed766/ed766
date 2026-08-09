@@ -1,4 +1,4 @@
-# SoC Design Verification Portfolio
+# RTL and SoC Design Verification Portfolio
 
 I build report-backed RTL and verification projects with SystemVerilog, UVM, Verilator, PyTorch, C/C++/SystemC reference models, assertions, formal checks, Python automation, and open-source implementation tools. The portfolio is deliberately separated by verification scope rather than repeating the same claims across projects.
 
@@ -23,7 +23,7 @@ I build report-backed RTL and verification projects with SystemVerilog, UVM, Ver
 
 ```mermaid
 flowchart LR
-  SOC["RISC-V chiplet\nfirmware + low power"] --> PORT["Subsystem DV portfolio"]
+  SOC["RISC-V chiplet\nfirmware + low power"] --> PORT["Hardware DV portfolio"]
   L1["AXI4 L1 cache\nmicroarchitecture + RAS"] --> PORT
   FAB["AXI4 QoS fabric\nUVM/VIP + concurrency"] --> PORT
   ML["INT8 tensor accelerator\nPyTorch + numerical DV"] --> PORT
