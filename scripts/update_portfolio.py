@@ -49,9 +49,9 @@ def main() -> int:
     fabric = metrics(args.fabric / "reports" / "project_metrics.csv")
     accelerator = metrics(args.accelerator / "reports" / "project_metrics.csv")
     need(chiplet, "stable_runs", "compiled_firmware_scenarios", "low_power_proxy_targets", "integrated_async_cdc")
-    need(cache, "directed_regression", "trace_replay", "interaction_coverage", "secded_ras_coverage")
+    need(cache, "directed_regression", "trace_replay", "msi_model_random", "integrated_cache_array_bist")
     need(fabric, "uvm_runtime", "full_model_replay", "advanced_interaction_coverage", "sustained_qos_points")
-    need(accelerator, "pytorch_rtl_scenarios", "interaction_coverage", "streaming_throughput", "rtl_mutations")
+    need(accelerator, "pytorch_rtl_scenarios", "rv32_accel_matrix", "rv32_accel_correctness", "rv32_accel_mutations")
     chiplet_release = latest_release(args.chiplet)
     cache_release = latest_release(args.cache)
     fabric_release = latest_release(args.fabric)
@@ -65,9 +65,9 @@ def main() -> int:
          "[CI](https://github.com/ed766/ucie_chiplet_soc/actions) · "
          f"[{chiplet_release}](https://github.com/ed766/ucie_chiplet_soc/releases/tag/{chiplet_release})"),
         ("[AXI4 L1 Cache DV](https://github.com/ed766/AXI4-L1-Cache-DV)",
-         "Cache microarchitecture, C++ replay, replacement/error checking, SECDED RAS",
+         "Cache microarchitecture, C++ replay, SECDED RAS, bounded MSI, SRAM BIST",
          f"`{cache['directed_regression']}` directed; `{cache['trace_replay']}` replay; "
-         f"`{cache['interaction_coverage']}` crosses; `{cache['secded_ras_coverage']}` RAS",
+         f"`{cache['msi_model_random']}` MSI seeds; `{cache['integrated_cache_array_bist']}` integrated BIST",
          "[Metrics](https://github.com/ed766/AXI4-L1-Cache-DV/blob/main/docs/project_metrics.md) · "
          "[CI](https://github.com/ed766/AXI4-L1-Cache-DV/actions) · "
          f"[{cache_release}](https://github.com/ed766/AXI4-L1-Cache-DV/releases/tag/{cache_release})"),
@@ -79,10 +79,10 @@ def main() -> int:
          "[CI](https://github.com/ed766/AXI4-QoS-Fabric-DV/actions) · "
          f"[{fabric_release}](https://github.com/ed766/AXI4-QoS-Fabric-DV/releases/tag/{fabric_release})"),
         ("[INT8 Tensor Accelerator DV](https://github.com/ed766/INT8-Tensor-Accelerator-DV)",
-         "PyTorch-to-RTL numerical checking, quantization, assertions, mutation testing",
+         "PyTorch-to-RTL checking, quantization, AXI integration, RV32I offload",
          f"`{accelerator['pytorch_rtl_scenarios']}` exact comparisons; "
-         f"`{accelerator['interaction_coverage']}` crosses; "
-         f"`{accelerator['streaming_throughput']}`; `{accelerator['rtl_mutations']}` mutations",
+         f"`{accelerator['rv32_accel_matrix']}` benchmark; "
+         f"`{accelerator['rv32_accel_correctness']}` correctness; `{accelerator['rv32_accel_mutations']}` mutations",
          "[Metrics](https://github.com/ed766/INT8-Tensor-Accelerator-DV/blob/main/docs/project_metrics.md) · "
          "[CI](https://github.com/ed766/INT8-Tensor-Accelerator-DV/actions) · "
          f"[{accelerator_release}](https://github.com/ed766/INT8-Tensor-Accelerator-DV/releases/tag/{accelerator_release})"),
