@@ -49,7 +49,8 @@ def main() -> int:
     fabric = metrics(args.fabric / "reports" / "project_metrics.csv")
     accelerator = metrics(args.accelerator / "reports" / "project_metrics.csv")
     need(chiplet, "stable_runs", "compiled_firmware_scenarios", "low_power_proxy_targets", "integrated_async_cdc")
-    need(cache, "directed_regression", "trace_replay", "msi_model_random", "integrated_cache_array_bist")
+    need(cache, "directed_regression", "trace_replay", "coherent_functional_coverage",
+         "coherent_cross_coverage", "coherent_mutations")
     need(fabric, "uvm_runtime", "full_model_replay", "advanced_interaction_coverage", "sustained_qos_points")
     need(accelerator, "pytorch_rtl_scenarios", "rv32_accel_matrix", "rv32_accel_correctness", "rv32_accel_mutations")
     chiplet_release = latest_release(args.chiplet)
@@ -65,9 +66,11 @@ def main() -> int:
          "[CI](https://github.com/ed766/ucie_chiplet_soc/actions) · "
          f"[{chiplet_release}](https://github.com/ed766/ucie_chiplet_soc/releases/tag/{chiplet_release})"),
         ("[AXI4 L1 Cache DV](https://github.com/ed766/AXI4-L1-Cache-DV)",
-         "Cache microarchitecture, C++ replay, SECDED RAS, bounded MSI, SRAM BIST",
+         "Cache microarchitecture, C++ replay, SECDED RAS, MSI coherence, RVWMO litmus checking",
          f"`{cache['directed_regression']}` directed; `{cache['trace_replay']}` replay; "
-         f"`{cache['msi_model_random']}` MSI seeds; `{cache['integrated_cache_array_bist']}` integrated BIST",
+         f"`{cache['coherent_functional_coverage']}` coherent coverage; "
+         f"`{cache['coherent_cross_coverage']}` coherent crosses; "
+         f"`{cache['coherent_mutations']}` coherent RTL mutations",
          "[Metrics](https://github.com/ed766/AXI4-L1-Cache-DV/blob/main/docs/project_metrics.md) · "
          "[CI](https://github.com/ed766/AXI4-L1-Cache-DV/actions) · "
          f"[{cache_release}](https://github.com/ed766/AXI4-L1-Cache-DV/releases/tag/{cache_release})"),
